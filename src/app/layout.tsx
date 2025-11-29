@@ -122,6 +122,58 @@ export default function RootLayout({
 }: Readonly<{
 	children: React.ReactNode;
 }>) {
+	const clerkPublishableKey = process.env.NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY;
+
+	const LayoutContent = () => (
+		<html lang="en" dir="ltr" suppressHydrationWarning>
+			<GoogleAnalytics gaId="G-MGK3BM8C3J" />
+			<GoogleTagManager gtmId="GTM-MMWR3898" />
+
+			<head>
+				<meta charSet="utf-8" />
+				<meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
+				<link rel="preconnect" href="https://fonts.googleapis.com" />
+				<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+				<link rel="preconnect" href="https://api.github.com" />
+				<link rel="preconnect" href="https://vercel.live" />
+
+				<link rel="dns-prefetch" href="//fonts.googleapis.com" />
+				<link rel="dns-prefetch" href="//api.github.com" />
+				<link rel="dns-prefetch" href="//vercel.live" />
+			</head>
+			<body id="home" className="scroll-smooth">
+				<Script
+					id="structured-data"
+					type="application/ld+json"
+					dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
+				/>
+				<MouseFollower />
+				<ScrollProgress />
+				<div className="pointer-events-none absolute inset-0 z-0">
+					<div className="animate-blob absolute top-20 left-10 h-72 w-72 rounded-full bg-purple-500 opacity-20 mix-blend-multiply blur-3xl filter"></div>
+					<div className="animate-blob animation-delay-2000 absolute top-40 right-10 h-72 w-72 rounded-full bg-yellow-500 opacity-20 mix-blend-multiply blur-3xl filter"></div>
+					<div className="animate-blob animation-delay-4000 absolute bottom-20 left-1/3 h-72 w-72 rounded-full bg-pink-500 opacity-20 mix-blend-multiply blur-3xl filter"></div>
+				</div>
+				<div className="min-h-screen overflow-hidden bg-linear-to-b from-zinc-900 via-zinc-900 to-black text-white">
+					<SWRProvider>
+						{children}
+						<Footer />
+						{/* <BundleMonitor />
+						<CacheDebug />
+						<PerformanceMonitor /> */}
+					</SWRProvider>
+					<Analytics />
+					<Toaster />
+				</div>
+			</body>
+		</html>
+	);
+
+	// If Clerk key is not available, render without ClerkProvider
+	if (!clerkPublishableKey) {
+		return <LayoutContent />;
+	}
+
 	return (
 		<ClerkProvider
 			appearance={{
@@ -142,48 +194,7 @@ export default function RootLayout({
 				},
 			}}
 		>
-			<html lang="en" dir="ltr" suppressHydrationWarning>
-				<GoogleAnalytics gaId="G-MGK3BM8C3J" />
-				<GoogleTagManager gtmId="GTM-MMWR3898" />
-
-				<head>
-					<meta charSet="utf-8" />
-					<meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
-					<link rel="preconnect" href="https://fonts.googleapis.com" />
-					<link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-					<link rel="preconnect" href="https://api.github.com" />
-					<link rel="preconnect" href="https://vercel.live" />
-
-					<link rel="dns-prefetch" href="//fonts.googleapis.com" />
-					<link rel="dns-prefetch" href="//api.github.com" />
-					<link rel="dns-prefetch" href="//vercel.live" />
-				</head>
-				<body id="home" className="scroll-smooth">
-					<Script
-						id="structured-data"
-						type="application/ld+json"
-						dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }}
-					/>
-					<MouseFollower />
-					<ScrollProgress />
-					<div className="pointer-events-none absolute inset-0 z-0">
-						<div className="animate-blob absolute top-20 left-10 h-72 w-72 rounded-full bg-purple-500 opacity-20 mix-blend-multiply blur-3xl filter"></div>
-						<div className="animate-blob animation-delay-2000 absolute top-40 right-10 h-72 w-72 rounded-full bg-yellow-500 opacity-20 mix-blend-multiply blur-3xl filter"></div>
-						<div className="animate-blob animation-delay-4000 absolute bottom-20 left-1/3 h-72 w-72 rounded-full bg-pink-500 opacity-20 mix-blend-multiply blur-3xl filter"></div>
-					</div>
-					<div className="min-h-screen overflow-hidden bg-linear-to-b from-zinc-900 via-zinc-900 to-black text-white">
-						<SWRProvider>
-							{children}
-							<Footer />
-							{/* <BundleMonitor />
-							<CacheDebug />
-							<PerformanceMonitor /> */}
-						</SWRProvider>
-						<Analytics />
-						<Toaster />
-					</div>
-				</body>
-			</html>
+			<LayoutContent />
 		</ClerkProvider>
 	);
 }
