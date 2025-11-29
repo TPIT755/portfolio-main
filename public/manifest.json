@@ -1,0 +1,13 @@
+{
+	"name": "TPIT CodeCraft - Portfolio",
+	"short_name": "TPIT Portfolio",
+	"description": "Full Stack Developer",
+	"start_url": "/",
+	"display": "standalone",
+	"background_color": "#000000",
+	"theme_color": "#8b5cf6",
+	"orientation": "portrait-primary",
+	"scope": "/",
+	"lang": "en",
+	"categories": ["productivity", "utilities"]
+}
